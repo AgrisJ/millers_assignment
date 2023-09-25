@@ -1,5 +1,5 @@
 import { Model, DataTypes } from 'sequelize';
-import { sequelize } from '../../sequalize';
+import { sequelize } from '../startup/sequalize';
 
 class Sizes extends Model {
   public id!: number;

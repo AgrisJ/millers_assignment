@@ -1,22 +1,17 @@
 require('dotenv').config({ path: `.env.${process.env.NODE_ENV}` });
 
 import express from 'express';
-import stylesRoutes from './src/routes/styles.routes';
-import categoriesRoutes from './src/routes/categories.routes';
+import { getRoutes } from './src/startup/routes';
+import { getAssociations } from './src/models/associations';
 
 const app = express();
 const port = 3000;
 
 // Importing associations
-import './src/models/associations';
-
-app.get('/', (req, res) => {
-  res.send('Hello World!');
-});
+getAssociations();
 
 // Importing routes
-app.use('/api/', stylesRoutes);
-app.use('/api/', categoriesRoutes);
+getRoutes(app);
 
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);

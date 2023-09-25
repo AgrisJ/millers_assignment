@@ -9,7 +9,7 @@ import { Categories } from '../models/categories';
 
 const router = express.Router();
 
-router.get('/categories', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const categories = await Categories.findAll({});
     res.json(categories);
@@ -18,7 +18,7 @@ router.get('/categories', async (req, res) => {
   }
 });
 
-router.get('/categories/:categoryId/styles', async (req, res) => {
+router.get('/:categoryId/styles', async (req, res) => {
   try {
     const styles = await Styles.findAll({
       where: {

@@ -10,7 +10,7 @@ export const handleError = (err: unknown, res: express.Response) => {
 };
 
 // Routes
-router.get('/styles', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const styles = await Styles.findAll({});
     res.json(styles);
@@ -19,7 +19,7 @@ router.get('/styles', async (req, res) => {
   }
 });
 
-router.get('/styles/:id', async (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
     const styles = await Styles.findAll({
       where: {
@@ -32,7 +32,7 @@ router.get('/styles/:id', async (req, res) => {
   }
 });
 
-// router.post('/style', async (req, res) => {
+// router.post('/', async (req, res) => {
 //   try {
 //     const style = await Styles.create(req.body);
 //     res.json(style);
@@ -41,7 +41,7 @@ router.get('/styles/:id', async (req, res) => {
 //   }
 // });
 
-// router.put('/style/:id', async (req, res) => {
+// router.put('/:id', async (req, res) => {
 //   try {
 //     const updatedStyle = await Styles.update(req.body, { where: { id: req.params.id } });
 //     res.json(updatedStyle);
@@ -50,7 +50,7 @@ router.get('/styles/:id', async (req, res) => {
 //   }
 // });
 
-// router.delete('/style/:id', async (req, res) => {
+// router.delete('/:id', async (req, res) => {
 //   try {
 //     await Styles.destroy({ where: { id: req.params.id } });
 //     res.json({ message: 'Style deleted successfully' });

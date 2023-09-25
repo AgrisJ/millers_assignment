@@ -1,7 +1,6 @@
 @hostname = http://localhost
 @port = 3000
 @baseUrl = {{hostname}}:{{port}}
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2M2M5M2QxMWNlYjQ0MGQ5M2Y0MzE1MTAiLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE2NzQxMzg0OTl9.LhsQVeHa3GyA8D7e6-VNkVUEFFz6pYHUpbzgbyHKHxg
 
 # Styles
 
