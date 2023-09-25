@@ -1,0 +1,29 @@
+@hostname = http://localhost
+@port = 3000
+@baseUrl = {{hostname}}:{{port}}
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2M2M5M2QxMWNlYjQ0MGQ5M2Y0MzE1MTAiLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE2NzQxMzg0OTl9.LhsQVeHa3GyA8D7e6-VNkVUEFFz6pYHUpbzgbyHKHxg
+
+# Styles
+
+### List styles
+GET {{baseUrl}}/api/styles HTTP/1.1
+
+### GET style by id
+GET {{baseUrl}}/api/styles/1 HTTP/1.1
+
+# ### POST style
+# POST {{baseUrl}}/api/styles HTTP/1.1
+# content-type: application/json
+# x-auth-token: {{token}}
+
+# {"name":"Fantasy Wild"}
+
+# ### UPDATE style
+# PUT {{baseUrl}}/api/styles/1 HTTP/1.1
+# content-type: application/json
+
+# {"name":"Holrdayland"}
+
+# ### DELETE style
+# DELETE {{baseUrl}}/api/styles/1 HTTP/1.1
+# x-auth-token: {{token}}
