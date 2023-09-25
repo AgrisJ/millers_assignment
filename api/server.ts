@@ -10,12 +10,12 @@ import './src/models/associations';
 import routes from './src/routes';
 
 app.get('/', (req, res) => {
-  res.send('Hello World!')
+  res.send('Hello World!');
 });
 
 // Use routes defined on router
 app.use('/', routes);
 
 app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`)
+  console.log(`Server running at http://localhost:${port}`);
 });

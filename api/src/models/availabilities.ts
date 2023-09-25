@@ -12,29 +12,32 @@ class Availabilities extends Model {
   public readonly updated_at!: Date;
 }
 
-Availabilities.init({
-  id: {
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
-    primaryKey: true,
+Availabilities.init(
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+    },
+    size_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    length_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    volume: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
   },
-  size_id: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
+  {
+    tableName: 'availability',
+    sequelize: sequelize,
+    createdAt: 'created_at',
+    updatedAt: 'updated_at',
   },
-  length_id: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-  volume: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-}, {
-  tableName: 'availability',
-  sequelize: sequelize, 
-  createdAt: 'created_at',
-  updatedAt: 'updated_at',
-});
+);
 
 export { Availabilities };
