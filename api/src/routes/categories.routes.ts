@@ -6,6 +6,7 @@ import { Availabilities } from '../models/availabilities';
 import { Lengths } from '../models/lengths';
 import { handleError } from './styles.routes';
 import { Categories } from '../models/categories';
+import { Images } from '../models/images';
 
 const router = express.Router();
 
@@ -56,6 +57,11 @@ router.get('/:categoryId/styles', async (req, res) => {
                   ],
                 },
               ],
+            },
+            {
+              model: Images,
+              required: false,
+              attributes: ['image_url'],
             },
           ],
         },
