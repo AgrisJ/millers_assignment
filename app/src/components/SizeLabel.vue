@@ -18,7 +18,7 @@ defineProps({
 </script>
 
 <template>
-  <div class="my-2">
+  <div :class="['my-2']">
     <label
       data-content="Notify when available"
       :class="[
@@ -29,13 +29,13 @@ defineProps({
     >
       <input
         type="radio"
-        class="form-radio hidden"
+        :class="['form-radio hidden']"
         :value="size"
         :checked="picked === size && volume > 0"
         @change="$emit('update:picked', ($event.target as HTMLInputElement).value)"
       />
       <EnvelopeIcon v-if="volume === 0" />
-      <span class="font-semi-bold uppercase">{{ size }}</span>
+      <span :class="['font-semi-bold uppercase']">{{ size }}</span>
     </label>
   </div>
 </template>

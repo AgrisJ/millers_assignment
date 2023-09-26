@@ -21,14 +21,15 @@ const pickedLength = ref(null);
 </script>
 
 <template>
-  <div class="">
-    <div class="flex gap-1">
-      <div v-for="(sizeObj, index) in sizes" :key="index" class="my-2">
+  <div>
+    <p :class="['font-Roboto font-thin uppercase']">Choose size</p>
+    <div :class="['flex gap-1']">
+      <div v-for="(sizeObj, index) in sizes" :key="index" :class="['my-1']">
         <SizeLabel :size="sizeObj.size" :picked="pickedSize" @update:picked="pickedSize = $event" :volume="sizeObj.volume" />
       </div>
     </div>
-    <div class="flex gap-1">
-      <div v-for="(lenghtObj, index) in lenghts" :key="index" class="my-2">
+    <div :class="['flex gap-1']">
+      <div v-for="(lenghtObj, index) in lenghts" :key="index" :class="['my-2']">
         <SizeLabel :size="lenghtObj.size" :picked="pickedLength" @update:picked="pickedLength = $event" :volume="lenghtObj.volume" />
       </div>
     </div>
