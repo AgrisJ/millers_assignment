@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { defineProps } from 'vue';
 import EnvelopeIcon from './EnvelopeIcon.vue';
+
 defineProps({
   size: {
     type: String,
