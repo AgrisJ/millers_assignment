@@ -1,36 +1,26 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-const picked = ref(null);
+import SizeLabel from './SizeLabel.vue';
+
 const sizes = ref(['XS', 'S', 'M', 'L', 'XL', 'XXL']);
+const lenghts = ref(['30', '32', '33', '34']);
+const pickedSize = ref(sizes.value[0]);
+const pickedLength = ref(null);
 </script>
 
 <template>
-  <div v-for="(size, index) in sizes" :key="index" class="my-2">
-    <label
-      :class="[
-        'w-16 h-16 inline-flex items-center bg-white p-2 justify-center text-center cursor-pointer',
-        picked === size ? 'border border-black' : 'radio-button',
-      ]"
-    >
-      <input type="radio" class="form-radio hidden" :value="size" v-model="picked" />
-      <span class="font-semi-bold uppercase">{{ size }}</span>
-    </label>
+  <div class="">
+    <div class="flex gap-4">
+      <div v-for="(size, index) in sizes" :key="index" class="my-2">
+        <SizeLabel :size="size" :picked="pickedSize" @update:picked="pickedSize = $event" />
+      </div>
+    </div>
+    <div class="flex gap-4">
+      <div v-for="(lenght, index) in lenghts" :key="index" class="my-2">
+        <SizeLabel :size="lenght" :picked="pickedLength" @update:picked="pickedLength = $event" />
+      </div>
+    </div>
   </div>
 </template>
 
-<style scoped>
-.radio-button {
-  /* Initial color */
-  border: solid 1px rgb(185, 185, 185);
-
-  /* Transition effect for border property */
-  transition: border 0.1s ease;
-}
-
-.radio-button:hover {
-  border: solid 1px black;
-}
-.radio-button:not(:hover) {
-  transition: border 0.5s ease;
-}
-</style>
+<style scoped></style>
