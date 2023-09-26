@@ -1,9 +1,9 @@
-<script setup>
-import Container from './components/Container.vue';
-</script>
-
 <template>
-  <Container msg="Millers Assignment" />
+  <div> <RouterView /> </div>
 </template>
 
-<style scoped></style>
+<script setup>
+import { RouterView } from 'vue-router';
+</script>
+
+<style lang="scss" scoped></style>
