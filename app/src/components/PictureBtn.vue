@@ -9,7 +9,11 @@ defineProps({
 });
 </script>
 <template>
-  <a href="#" :class="['flex flex-col items-center justify-center w-16', picked ? 'border border-black' : '']" @click="$emit('update:picked', true)">
+  <a
+    href="#"
+    :class="['flex flex-col items-center justify-center w-16 hover:border border-black w-15', picked ? 'border border-black w-15' : '']"
+    @click="$emit('update:picked', true)"
+  >
     <picture :class="['flex flex-col items-center justify-center']">
       <img
         :class="['flex flex-col items-center justify-center']"
