@@ -22,9 +22,9 @@ defineProps({
     <label
       data-content="Notify when available"
       :class="[
-        'w-16 h-16 inline-flex items-center p-2 justify-center text-center bg-white cursor-pointer select-none relative',
+        'w-16 h-16 text-sm inline-flex items-center p-2 justify-center text-center bg-white cursor-pointer select-none relative',
         volume > 0 ? 'border-transitions' : 'border border-gray-100 text-gray-200 tooltip z-10',
-        picked === size ? 'border-black' : ' border-gray-300',
+        picked === size ? 'border-black' : 'border-gray-300',
       ]"
     >
       <input
