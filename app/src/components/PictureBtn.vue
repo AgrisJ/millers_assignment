@@ -6,13 +6,16 @@ defineProps({
     type: String,
     required: true,
   },
+  color: {
+    type: String,
+    required: true,
+  },
 });
 </script>
 <template>
-  <a
-    href="#"
-    :class="['flex flex-col items-center justify-center w-16 hover:border border-black w-15', picked ? 'border border-black w-15' : '']"
-    @click="$emit('update:picked', true)"
+  <button
+    :class="['flex flex-col items-center justify-center w-16 hover:border border-black w-15', picked === color ? 'border border-black w-15' : '']"
+    @click.prevent="$emit('update:picked', color)"
   >
     <picture :class="['flex flex-col items-center justify-center']">
       <img
@@ -21,7 +24,8 @@ defineProps({
         alt="Fashion Styles"
       />
     </picture>
-  </a>
+    {{ color }}
+  </button>
 </template>
 
 <style scoped></style>
