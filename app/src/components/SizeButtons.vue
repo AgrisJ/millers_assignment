@@ -111,7 +111,7 @@ const lengthsFetched = computed(() => {
 <template>
   <div>
     <p :class="['font-Roboto font-thin uppercase']">Choose size</p>
-    <div :class="['flex gap-1']">
+    <div :class="['flex flex-wrap gap-1']">
       <div v-for="(sizeObj, index) in sizesToUse" :key="index" :class="['my-1']">
         <SizeLabel
           :size="sizeObj.size_name"
@@ -121,7 +121,7 @@ const lengthsFetched = computed(() => {
         />
       </div>
     </div>
-    <div :class="['flex gap-1']">
+    <div :class="['flex flex-wrap gap-1']">
       <div v-for="(lenghtObj, index) in lenghtsToUse" :key="index" :class="['my-2']">
         <SizeLabel
           :size="lenghtObj.size_name"

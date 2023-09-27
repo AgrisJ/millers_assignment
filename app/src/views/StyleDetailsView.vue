@@ -25,7 +25,7 @@ function handleUpdatePicked(event) {
 
 <template>
   <main :class="['container']">
-    <div :class="['grid-cols-4 gap-4 flex justify-center relative bg-white']">
+    <div :class="['grid-cols-4 gap-4 flex flex-wrap gap-1 justify-center relative bg-white']">
       <PictureBtn
         v-for="(color, index) in selectedStyle?.Colors"
         :key="index"

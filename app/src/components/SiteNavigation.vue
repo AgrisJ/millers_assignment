@@ -34,7 +34,7 @@ let selectedCategory = computed(() => store.state.category);
     <nav :class="['container flex flex-col sm:flex-row items-center gap-4 text-white py-6']">
       <RouterLink :to="{ name: 'home' }">
         <div :class="['flex items-center gap-3']">
-          <p :class="['text-2xl']">The Fashion Styles Component</p>
+          <p :class="['text-2xl text-center']">The Fashion Styles Component</p>
         </div>
       </RouterLink>
 
