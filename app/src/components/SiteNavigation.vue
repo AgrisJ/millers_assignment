@@ -17,7 +17,7 @@ onMounted(async () => {
 });
 
 const setCategory = (category) => {
-  store.dispatch('setCategory', category.category_name);
+  store.dispatch('setCategory', category);
 };
 
 let selectedCategory = computed(() => store.state.category);
@@ -45,6 +45,5 @@ let selectedCategory = computed(() => store.state.category);
         </ul>
       </div>
     </nav>
-    <p :class="['p-1 font-thin text-white text-center bg-fashion-secondary']">Selected Category: {{ selectedCategory }}</p>
   </header>
 </template>
