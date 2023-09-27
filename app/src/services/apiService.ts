@@ -1,4 +1,4 @@
-const BASE_URL = import.meta.env.VITE_APP_API_URL;
+const BASE_URL: string = import.meta.env.VITE_APP_API_URL;
 
 async function getCategories() {
   const response = await fetch(`${BASE_URL}/categories`);

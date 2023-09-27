@@ -1,9 +1,12 @@
 <script setup>
 import { RouterLink } from 'vue-router';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import apiService from '../services/apiService';
+import { useStore } from 'vuex';
 
 let categories = ref([]);
+
+const store = useStore();
 
 onMounted(async () => {
   try {
@@ -12,6 +15,12 @@ onMounted(async () => {
     console.error(`Failed to fetch categories: ${error}`);
   }
 });
+
+const setCategory = (category) => {
+  store.dispatch('setCategory', category.category_name);
+};
+
+let selectedCategory = computed(() => store.state.category);
 </script>
 
 <template>
@@ -25,11 +34,17 @@ onMounted(async () => {
 
       <div :class="['flex gap-3 flex-1 justify-end']">
         <ul :class="['flex gap-3']">
-          <li v-for="category in categories" :key="category.id" :class="['cursor-pointer hover:text-gray-400 active:text-gray-700']">
+          <li
+            v-for="category in categories"
+            :key="category.id"
+            :class="['cursor-pointer hover:text-gray-400 active:text-gray-700']"
+            @click="setCategory(category)"
+          >
             {{ category.category_name }}
           </li>
         </ul>
       </div>
     </nav>
+    <p :class="['p-1 font-thin text-white text-center bg-fashion-secondary']">Selected Category: {{ selectedCategory }}</p>
   </header>
 </template>
