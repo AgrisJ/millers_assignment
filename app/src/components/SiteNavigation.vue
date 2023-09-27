@@ -1,12 +1,13 @@
 <script setup>
-import { RouterLink } from 'vue-router';
+import { RouterLink, useRouter } from 'vue-router';
 import { ref, onMounted, computed } from 'vue';
-import apiService from '../services/apiService';
+import apiService from '@/services/apiService';
 import { useStore } from 'vuex';
 
 let categories = ref([]);
 
 const store = useStore();
+const router = useRouter();
 
 onMounted(async () => {
   try {
@@ -18,6 +19,11 @@ onMounted(async () => {
 
 const setCategory = (category) => {
   store.dispatch('setCategory', category);
+};
+
+const handleClickCategory = (category) => {
+  setCategory(category);
+  router.push('/category');
 };
 
 let selectedCategory = computed(() => store.state.category);
@@ -38,7 +44,7 @@ let selectedCategory = computed(() => store.state.category);
             v-for="category in categories"
             :key="category.id"
             :class="['cursor-pointer hover:text-gray-400 active:text-gray-700']"
-            @click="setCategory(category)"
+            @click="handleClickCategory(category)"
           >
             {{ category.category_name }}
           </li>
