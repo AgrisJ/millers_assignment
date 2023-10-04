@@ -1,46 +1,38 @@
 import { Model, DataTypes } from 'sequelize';
 import { sequelize } from '../startup/sequalize';
 
-class Colors extends Model {
+class ColorSize extends Model {
   public id!: number;
-  public style_id!: number;
-  public color_name!: string;
+  public color_id!: number;
+  public size_id!: number;
 
   // timestamps!
   public readonly created_at!: Date;
   public readonly updated_at!: Date;
 }
 
-Colors.init(
+ColorSize.init(
   {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },
-    style_id: {
+    color_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    color_name: {
-      type: new DataTypes.STRING(50),
-      allowNull: false,
-    },
-    created_at: {
-      type: DataTypes.DATE,
-      allowNull: false,
-    },
-    updated_at: {
-      type: DataTypes.DATE,
+    size_id: {
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
   },
   {
-    tableName: 'colors',
+    tableName: 'color_sizes',
     sequelize: sequelize,
     createdAt: 'created_at',
     updatedAt: 'updated_at',
   },
 );
 
-export { Colors };
+export { ColorSize };

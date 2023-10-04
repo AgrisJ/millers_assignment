@@ -3,7 +3,6 @@ import { sequelize } from '../startup/sequalize';
 
 class Sizes extends Model {
   public id!: number;
-  public color_id!: number;
   public size_name!: string;
 
   // timestamps!
@@ -17,10 +16,6 @@ Sizes.init(
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
-    },
-    color_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
     },
     size_name: {
       type: new DataTypes.STRING(10),

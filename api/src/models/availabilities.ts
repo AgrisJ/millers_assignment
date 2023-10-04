@@ -3,8 +3,7 @@ import { sequelize } from '../startup/sequalize';
 
 class Availabilities extends Model {
   public id!: number;
-  public size_id!: number;
-  public length_id!: number;
+  public color_size_id!: number;
   public volume!: number;
 
   // timestamps!
@@ -19,11 +18,7 @@ Availabilities.init(
       autoIncrement: true,
       primaryKey: true,
     },
-    size_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    length_id: {
+    color_size_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },

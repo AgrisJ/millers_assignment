@@ -6,6 +6,7 @@ import { Availabilities } from '../models/availabilities';
 import { handleError } from './styles.routes';
 import { Categories } from '../models/categories';
 import { Images } from '../models/images';
+import { ColorSize } from '../models/colorSize';
 
 const router = express.Router();
 
@@ -31,23 +32,27 @@ router.get('/:categoryId/styles', async (req, res) => {
           attributes: ['color_name'],
           include: [
             {
-              // Include Sizes under each Color
               model: Sizes,
-              required: true, // TODO: throw error if no sizes
+              required: true,
+              through: { as: 'color_sizes' },
               attributes: ['id', 'size_name'],
-              include: [
-                {
-                  // Include Availabilities under each Size
-                  model: Availabilities,
-                  required: false,
-                  attributes: ['id', 'volume'],
-                },
-              ],
             },
             {
               model: Images,
               required: false,
               attributes: ['image_url'],
+            },
+            {
+              model: ColorSize,
+              required: false,
+              attributes: ['id'],
+              include: [
+                {
+                  model: Availabilities,
+                  required: false,
+                  attributes: ['id', 'volume'],
+                },
+              ],
             },
           ],
         },

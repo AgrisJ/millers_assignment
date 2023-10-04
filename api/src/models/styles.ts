@@ -26,10 +26,6 @@ Styles.init(
       type: new DataTypes.STRING(50),
       allowNull: false,
     },
-    image_ids: {
-      type: new DataTypes.STRING(500),
-      allowNull: false,
-    },
     created_at: {
       type: DataTypes.DATE,
       allowNull: false,
