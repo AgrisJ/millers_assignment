@@ -14,7 +14,7 @@ async function getStyles() {
   }
   return await response.json();
 }
-async function getStyle(id: string) {
+async function getStyle(id: number) {
   const response = await fetch(`${BASE_URL}/categories/${id}/styles`);
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
