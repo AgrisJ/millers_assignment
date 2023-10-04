@@ -36,6 +36,27 @@ router.get('/:categoryId/styles', async (req, res) => {
               required: true,
               through: { as: 'color_sizes' },
               attributes: ['id', 'size_name'],
+              include: [
+                {
+                  model: Availabilities,
+                  required: false,
+                  attributes: ['id', 'volume'],
+                },
+                // Child Sizes
+                {
+                  model: Sizes,
+                  as: 'Children',
+                  required: false,
+                  attributes: ['id', 'size_name'],
+                  include: [
+                    {
+                      model: Availabilities,
+                      required: false,
+                      attributes: ['id', 'volume'],
+                    },
+                  ],
+                },
+              ],
             },
             {
               model: Images,
@@ -46,13 +67,6 @@ router.get('/:categoryId/styles', async (req, res) => {
               model: ColorSize,
               required: false,
               attributes: ['id'],
-              include: [
-                {
-                  model: Availabilities,
-                  required: false,
-                  attributes: ['id', 'volume'],
-                },
-              ],
             },
           ],
         },
