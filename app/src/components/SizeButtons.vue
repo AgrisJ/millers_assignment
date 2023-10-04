@@ -1,19 +1,23 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { useStore } from 'vuex';
-const store = useStore();
 import SizeLabel from './SizeLabel.vue';
 import apiService from '@/services/apiService';
+import { type StylePerCategory } from '@/models/StylesPerCategory';
+import { sizes as sizesData, lengths as lengthsData } from '@/services/demoData';
 
-let stylesPerCategory = ref([]);
+const store = useStore();
+let stylesPerCategory = ref<StylePerCategory[]>([]);
 let selectedCategory = computed(() => store.state.category);
-let selectedStyle = computed(() => store.state.style?.[0]);
+let selectedStyle = computed(() => (store.state.style as StylePerCategory[])?.[0]);
 
 watch(
   selectedCategory,
   async (newCategory) => {
+    if (!newCategory?.id) return;
     try {
-      stylesPerCategory.value = await apiService.getStyle(newCategory?.id);
+      const response = await apiService.getStyle(newCategory.id);
+      stylesPerCategory.value = response?.data || [];
     } catch (error) {
       console.error(`Failed to fetch categories: ${error}`);
     }
@@ -24,88 +28,34 @@ watch(
 const props = defineProps({
   pickedColor: {
     type: String,
-    required: false,
   },
   isDemo: {
     type: Boolean,
-    required: false,
-    default: false,
   },
 });
 
-const sizes = ref([
-  {
-    size_name: 'XS',
-    Availabilities: [{ volume: 5 }],
-  },
-  {
-    size_name: 'S',
-    Availabilities: [{ volume: 10 }],
-  },
-  {
-    size_name: 'M',
-    Availabilities: [{ volume: 15 }],
-  },
-  {
-    size_name: 'L',
-    Availabilities: [{ volume: 0 }],
-  },
-  {
-    size_name: 'XL',
-    Availabilities: [{ volume: 25 }],
-  },
-  {
-    size_name: 'XXL',
-    Availabilities: [{ volume: 30 }],
-  },
-]);
+const dummySizes = ref(
+  sizesData.map((size) => ({
+    ...size,
+    Children: lengthsData,
+  })),
+);
+
 const sizesFetched = computed(() => {
-  if (selectedStyle.value?.Colors) {
-    const selectedColor = selectedStyle.value.Colors.find((color) => color.color_name === props.pickedColor);
-
-    return selectedColor ? selectedColor.Sizes : [];
-  }
-
-  return [];
+  const selectedColor = selectedStyle.value?.Colors?.find((color) => color.color_name === props.pickedColor);
+  return selectedColor ? selectedColor.Sizes : [];
 });
-
-const lenghts = ref([
-  {
-    size_name: '30',
-    Availabilities: [{ volume: 5 }],
-  },
-  {
-    size_name: '32',
-    Availabilities: [{ volume: 10 }],
-  },
-  {
-    size_name: '34',
-    Availabilities: [{ volume: 15 }],
-  },
-  {
-    size_name: '36',
-    Availabilities: [{ volume: 2 }],
-  },
-]);
-
-const sizesToUse = computed(() => {
-  return props.isDemo ? sizes?.value : sizesFetched?.value;
-});
-const lenghtsToUse = computed(() => {
-  return props.isDemo ? lenghts?.value : lengthsFetched?.value;
-});
-
-const pickedSize = ref(sizesToUse?.[0]?.size_name);
-const pickedLength = ref('');
 
 const lengthsFetched = computed(() => {
-  if (sizesFetched) {
-    const selectedSize = sizesFetched.value.find((size) => size?.size_name === pickedSize?.value);
-    return selectedSize ? selectedSize?.value?.Lengths : [];
-  }
-
-  return [];
+  const selectedSize = sizesFetched.value.find((size) => size?.size_name === pickedSize?.value);
+  return selectedSize ? selectedSize.Children : [];
 });
+
+const sizesToUse = computed(() => (props.isDemo ? dummySizes.value : sizesFetched.value));
+const lengthsToUse = computed(() => (props.isDemo ? dummySizes.value?.[0]?.Children : lengthsFetched.value));
+
+const pickedSize = ref(sizesToUse.value?.[0]?.size_name);
+const pickedLength = ref('');
 </script>
 
 <template>
@@ -122,12 +72,12 @@ const lengthsFetched = computed(() => {
       </div>
     </div>
     <div :class="['flex flex-wrap gap-1']">
-      <div v-for="(lenghtObj, index) in lenghtsToUse" :key="index" :class="['my-2']">
+      <div v-for="(lengthObj, index) in lengthsToUse" :key="index" class="my-2">
         <SizeLabel
-          :size="lenghtObj.size_name"
+          :size="lengthObj.size_name"
           :picked="pickedLength"
           @update:picked="pickedLength = $event"
-          :volume="lenghtObj?.Availabilities?.[0]?.volume || 0"
+          :volume="lengthObj?.Availabilities?.[0]?.volume || 0"
         />
       </div>
     </div>
