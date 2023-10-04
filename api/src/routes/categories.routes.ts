@@ -1,12 +1,11 @@
 import express from 'express';
+import { handleError } from './styles.routes';
 import { Styles } from '../models/styles';
 import { Colors } from '../models/colors';
 import { Sizes } from '../models/sizes';
 import { Availabilities } from '../models/availabilities';
-import { handleError } from './styles.routes';
 import { Categories } from '../models/categories';
 import { Images } from '../models/images';
-import { ColorSize } from '../models/colorSize';
 
 const router = express.Router();
 
@@ -36,6 +35,7 @@ router.get('/:categoryId/styles', async (req, res) => {
               required: true,
               through: { as: 'color_sizes' },
               attributes: ['id', 'size_name'],
+              where: { parent_id: null }, // Only include 'parent' sizes
               include: [
                 {
                   model: Availabilities,
@@ -62,11 +62,6 @@ router.get('/:categoryId/styles', async (req, res) => {
               model: Images,
               required: false,
               attributes: ['image_url'],
-            },
-            {
-              model: ColorSize,
-              required: false,
-              attributes: ['id'],
             },
           ],
         },
