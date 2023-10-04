@@ -3,7 +3,6 @@ import { Styles } from '../models/styles';
 import { Colors } from '../models/colors';
 import { Sizes } from '../models/sizes';
 import { Availabilities } from '../models/availabilities';
-import { Lengths } from '../models/lengths';
 import { handleError } from './styles.routes';
 import { Categories } from '../models/categories';
 import { Images } from '../models/images';
@@ -42,19 +41,6 @@ router.get('/:categoryId/styles', async (req, res) => {
                   model: Availabilities,
                   required: false,
                   attributes: ['id', 'volume'],
-                },
-                {
-                  model: Lengths,
-                  required: false,
-                  attributes: ['id', 'length_name'],
-                  include: [
-                    {
-                      // Include Availabilities under each Length
-                      model: Availabilities,
-                      required: false,
-                      attributes: ['id', 'volume'],
-                    },
-                  ],
                 },
               ],
             },
