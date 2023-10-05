@@ -1,5 +1,9 @@
 import express from 'express';
 import { Styles } from '../models/styles';
+import { Availabilities } from '../models/availabilities';
+import { Images } from '../models/images';
+import { Colors } from '../models/colors';
+import { Sizes } from '../models/sizes';
 
 const router = express.Router();
 
@@ -19,14 +23,56 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:styleId', async (req, res) => {
   try {
-    const styles = await Styles.findAll({
+    const style = await Styles.findOne({
       where: {
-        id: req.params.id,
+        id: req.params.styleId,
       },
+      include: [
+        {
+          model: Colors,
+          required: true,
+          attributes: ['color_name'],
+          include: [
+            {
+              model: Sizes,
+              required: true,
+              through: { as: 'color_sizes' },
+              attributes: ['id', 'size_name'],
+              where: { parent_id: null }, // Only include 'parent' sizes
+              include: [
+                {
+                  model: Availabilities,
+                  required: false,
+                  attributes: ['id', 'volume'],
+                },
+                // Child Sizes
+                {
+                  model: Sizes,
+                  as: 'Children',
+                  required: false,
+                  attributes: ['id', 'size_name'],
+                  include: [
+                    {
+                      model: Availabilities,
+                      required: false,
+                      attributes: ['id', 'volume'],
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              model: Images,
+              required: false,
+              attributes: ['image_url'],
+            },
+          ],
+        },
+      ],
     });
-    res.json(styles);
+    res.json(style);
   } catch (err) {
     handleError(err, res);
   }
