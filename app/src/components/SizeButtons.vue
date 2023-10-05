@@ -1,25 +1,37 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue';
-import { useStore } from 'vuex';
+import { ref, computed, watch, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import SizeLabel from './SizeLabel.vue';
 import apiService from '@/services/apiService';
-import { type StylePerCategory } from '@/models/StylesPerCategory';
+import { type Style } from '@/models/StylesPerCategory';
 import { sizes as sizesData, lengths as lengthsData } from '@/services/demoData';
 
-const store = useStore();
-let stylesPerCategory = ref<StylePerCategory[]>([]);
-let selectedCategory = computed(() => store.state.category);
-let selectedStyle = computed(() => (store.state.style as StylePerCategory[])?.[0]);
+const router = useRouter();
+const styleId = ref(router.currentRoute.value.params.id);
+let selectedStyle = ref<Style>();
+
+onMounted(async () => {
+  try {
+    selectedStyle.value = await apiService.getStyle(Number(styleId.value));
+  } catch (error) {
+    console.error(`Failed to fetch categories: ${error}`);
+  }
+});
 
 watch(
-  selectedCategory,
-  async (newCategory) => {
-    if (!newCategory?.id) return;
+  () => router.currentRoute.value,
+  async (newRoute) => {
+    styleId.value = newRoute.params.id;
+  },
+);
+
+watch(
+  styleId,
+  async (newStyleId) => {
     try {
-      const response = await apiService.getStyle(newCategory.id);
-      stylesPerCategory.value = response?.data || [];
+      selectedStyle.value = await apiService.getStyle(Number(newStyleId));
     } catch (error) {
-      console.error(`Failed to fetch categories: ${error}`);
+      console.error(`Failed to fetch Style: ${error}`);
     }
   },
   { immediate: true },
@@ -56,6 +68,16 @@ const lengthsToUse = computed(() => (props.isDemo ? dummySizes.value?.[0]?.Child
 
 const pickedSize = ref(sizesToUse.value?.[0]?.size_name);
 const pickedLength = ref('');
+
+watch(
+  sizesToUse,
+  (newSizes) => {
+    if (newSizes.length > 0) {
+      pickedSize.value = newSizes[0].size_name;
+    }
+  },
+  { immediate: true },
+);
 </script>
 
 <template>

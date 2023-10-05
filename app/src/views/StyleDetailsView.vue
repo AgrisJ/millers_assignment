@@ -1,18 +1,48 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue';
-import { useStore } from 'vuex';
+import { ref, onMounted, watch } from 'vue';
+import { useRouter } from 'vue-router';
 import PictureBtn from '@/components/PictureBtn.vue';
 import SizeButtons from '@/components/SizeButtons.vue';
+import { type Style } from '@/models/StylesPerCategory';
+import apiService from '@/services/apiService';
 
-const store = useStore();
-let selectedStyle = computed(() => store.state.style?.[0]);
+const router = useRouter();
+const styleId = ref(router.currentRoute.value.params.id);
+let selectedStyle = ref<Style>();
 let pickedColor = ref('');
 
 watch(
   selectedStyle,
   (newVal) => {
-    if (newVal && newVal.Colors && newVal.Colors.length > 0) {
-      pickedColor.value = newVal.Colors[0].color_name;
+    if (newVal?.Colors && newVal?.Colors?.length > 0) {
+      pickedColor.value = newVal?.Colors[0].color_name;
+    }
+  },
+  { immediate: true },
+);
+
+onMounted(async () => {
+  try {
+    selectedStyle.value = await apiService.getStyle(Number(styleId.value));
+  } catch (error) {
+    console.error(`Failed to fetch categories: ${error}`);
+  }
+});
+
+watch(
+  () => router.currentRoute.value,
+  async (newRoute) => {
+    styleId.value = newRoute.params.id;
+  },
+);
+
+watch(
+  styleId,
+  async (newStyleId) => {
+    try {
+      selectedStyle.value = await apiService.getStyle(Number(newStyleId));
+    } catch (error) {
+      console.error(`Failed to fetch Style: ${error}`);
     }
   },
   { immediate: true },

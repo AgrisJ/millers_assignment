@@ -1,12 +1,11 @@
-<script setup>
+<script setup lang="ts">
 import { RouterLink, useRouter } from 'vue-router';
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted } from 'vue';
 import apiService from '@/services/apiService';
-import { useStore } from 'vuex';
+import { type Category } from '@/models/Category';
 
-let categories = ref([]);
+let categories = ref<Category[]>([]);
 
-const store = useStore();
 const router = useRouter();
 
 onMounted(async () => {
@@ -17,16 +16,9 @@ onMounted(async () => {
   }
 });
 
-const setCategory = (category) => {
-  store.dispatch('setCategory', category);
+const handleClickCategory = (category: Category) => {
+  router.push(`/category/${category.id}`);
 };
-
-const handleClickCategory = (category) => {
-  setCategory(category);
-  router.push('/category');
-};
-
-let selectedCategory = computed(() => store.state.category);
 </script>
 
 <template>
