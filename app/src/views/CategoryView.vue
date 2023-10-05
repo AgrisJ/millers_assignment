@@ -1,44 +1,10 @@
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue';
-import apiService from '@/services/apiService';
 import { useRouter } from 'vue-router';
 import { type Style } from '@/models/StylesPerCategory';
-
-let stylesPerCategory = ref<Style[]>([]);
+import useFetchDataOnRouteChange from '@/hooks/useFetchData';
 
 const router = useRouter();
-const categoryId = ref(router.currentRoute.value.params.id);
-
-onMounted(async () => {
-  if (!isNaN(Number(categoryId.value))) {
-    try {
-      stylesPerCategory.value = await apiService.getStylesPerCategory(Number(categoryId.value));
-    } catch (error) {
-      console.error(`Failed to fetch categories: ${error}`);
-    }
-  }
-});
-
-watch(
-  () => router.currentRoute.value,
-  async (newRoute) => {
-    categoryId.value = newRoute.params.id;
-  },
-);
-
-watch(
-  categoryId,
-  async (newCategoryId) => {
-    if (!isNaN(Number(categoryId.value))) {
-      try {
-        stylesPerCategory.value = await apiService.getStylesPerCategory(Number(newCategoryId));
-      } catch (error) {
-        console.error(`Failed to fetch categories: ${error}`);
-      }
-    }
-  },
-  { immediate: true },
-);
+const { data: stylesPerCategory } = useFetchDataOnRouteChange<Style[]>('getStylesPerCategory');
 
 const handleStyleClick = (style: Style) => {
   router.push(`/style/${style.id}`);

@@ -1,45 +1,11 @@
 <script setup lang="ts">
-import { ref, computed, watch, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, computed, watch } from 'vue';
 import SizeLabel from './SizeLabel.vue';
-import apiService from '@/services/apiService';
 import { type Style } from '@/models/StylesPerCategory';
 import { sizes as sizesData, lengths as lengthsData } from '@/services/demoData';
+import useFetchDataOnRouteChange from '@/hooks/useFetchData';
 
-const router = useRouter();
-const styleId = ref(router.currentRoute.value.params.id);
-let selectedStyle = ref<Style>();
-
-onMounted(async () => {
-  if (!isNaN(Number(styleId.value))) {
-    try {
-      selectedStyle.value = await apiService.getStyle(Number(styleId.value));
-    } catch (error) {
-      console.error(`Failed to fetch categories: ${error}`);
-    }
-  }
-});
-
-watch(
-  () => router.currentRoute.value,
-  async (newRoute) => {
-    styleId.value = newRoute.params.id;
-  },
-);
-
-watch(
-  styleId,
-  async (newStyleId) => {
-    if (!isNaN(Number(newStyleId))) {
-      try {
-        selectedStyle.value = await apiService.getStyle(Number(newStyleId));
-      } catch (error) {
-        console.error(`Failed to fetch Style: ${error}`);
-      }
-    }
-  },
-  { immediate: true },
-);
+const { data: selectedStyle } = useFetchDataOnRouteChange<Style>('getStyle');
 
 const props = defineProps({
   pickedColor: {
@@ -57,13 +23,16 @@ const dummySizes = ref(
   })),
 );
 
+const getSelectedColor = () => selectedStyle.value?.Colors?.find((color) => color.color_name === props.pickedColor);
+const getSelectedSize = () => sizesFetched.value.find((size) => size?.size_name === pickedSize?.value);
+
 const sizesFetched = computed(() => {
-  const selectedColor = selectedStyle.value?.Colors?.find((color) => color.color_name === props.pickedColor);
+  const selectedColor = getSelectedColor();
   return selectedColor ? selectedColor.Sizes : [];
 });
 
 const lengthsFetched = computed(() => {
-  const selectedSize = sizesFetched.value.find((size) => size?.size_name === pickedSize?.value);
+  const selectedSize = getSelectedSize();
   return selectedSize ? selectedSize.Children : [];
 });
 
