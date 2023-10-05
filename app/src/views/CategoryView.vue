@@ -10,10 +10,12 @@ const router = useRouter();
 const categoryId = ref(router.currentRoute.value.params.id);
 
 onMounted(async () => {
-  try {
-    stylesPerCategory.value = await apiService.getStylesPerCategory(Number(categoryId.value));
-  } catch (error) {
-    console.error(`Failed to fetch categories: ${error}`);
+  if (!isNaN(Number(categoryId.value))) {
+    try {
+      stylesPerCategory.value = await apiService.getStylesPerCategory(Number(categoryId.value));
+    } catch (error) {
+      console.error(`Failed to fetch categories: ${error}`);
+    }
   }
 });
 
@@ -27,10 +29,12 @@ watch(
 watch(
   categoryId,
   async (newCategoryId) => {
-    try {
-      stylesPerCategory.value = await apiService.getStylesPerCategory(Number(newCategoryId));
-    } catch (error) {
-      console.error(`Failed to fetch categories: ${error}`);
+    if (!isNaN(Number(categoryId.value))) {
+      try {
+        stylesPerCategory.value = await apiService.getStylesPerCategory(Number(newCategoryId));
+      } catch (error) {
+        console.error(`Failed to fetch categories: ${error}`);
+      }
     }
   },
   { immediate: true },

@@ -11,10 +11,12 @@ const styleId = ref(router.currentRoute.value.params.id);
 let selectedStyle = ref<Style>();
 
 onMounted(async () => {
-  try {
-    selectedStyle.value = await apiService.getStyle(Number(styleId.value));
-  } catch (error) {
-    console.error(`Failed to fetch categories: ${error}`);
+  if (!isNaN(Number(styleId.value))) {
+    try {
+      selectedStyle.value = await apiService.getStyle(Number(styleId.value));
+    } catch (error) {
+      console.error(`Failed to fetch categories: ${error}`);
+    }
   }
 });
 
@@ -28,10 +30,12 @@ watch(
 watch(
   styleId,
   async (newStyleId) => {
-    try {
-      selectedStyle.value = await apiService.getStyle(Number(newStyleId));
-    } catch (error) {
-      console.error(`Failed to fetch Style: ${error}`);
+    if (!isNaN(Number(newStyleId))) {
+      try {
+        selectedStyle.value = await apiService.getStyle(Number(newStyleId));
+      } catch (error) {
+        console.error(`Failed to fetch Style: ${error}`);
+      }
     }
   },
   { immediate: true },
