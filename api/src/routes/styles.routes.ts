@@ -4,14 +4,9 @@ import { Availabilities } from '../models/availabilities';
 import { Images } from '../models/images';
 import { Colors } from '../models/colors';
 import { Sizes } from '../models/sizes';
+import { error } from '../middleware/error';
 
 const router = express.Router();
-
-// Error handling middleware
-export const handleError = (err: unknown, res: express.Response) => {
-  console.error(err);
-  res.status(500).json({ message: 'An error occurred' });
-};
 
 // Routes
 router.get('/', async (req, res) => {
@@ -19,7 +14,7 @@ router.get('/', async (req, res) => {
     const styles = await Styles.findAll({});
     res.json(styles);
   } catch (err) {
-    handleError(err, res);
+    error(err, res);
   }
 });
 
@@ -74,7 +69,7 @@ router.get('/:styleId', async (req, res) => {
     });
     res.json(style);
   } catch (err) {
-    handleError(err, res);
+    error(err, res);
   }
 });
 
