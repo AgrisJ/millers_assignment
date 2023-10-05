@@ -25,13 +25,14 @@ export interface ColorSizes {
 }
 
 export interface Color {
+  id: number;
   color_name: string;
   Sizes: Size[];
   Image: null;
   ColorSizes: ColorSizes[];
 }
 
-export interface StylePerCategory {
+export interface Style {
   id: number;
   category_id: number;
   style_name: string;
