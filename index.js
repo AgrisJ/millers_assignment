@@ -6,7 +6,7 @@ const { getAssociations } = require('./dist/models/associations.js');
 const cors = require('cors');
 
 const app = express();
-const port = process.env.PORT || 80;
+const port = process.env.PORT || 3000;
 
 // Importing associations
 getAssociations();
@@ -17,6 +17,8 @@ app.use(cors());
 // Importing routes
 getRoutes(app);
 
+// Serving backend application
+app.use('/dist', express.static(path.join(__dirname, './dist')));
 
 // Serving frontend application
 app.use('/', express.static(path.join(__dirname, './app/dist')));
