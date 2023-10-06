@@ -6,7 +6,7 @@ const { getAssociations } = require('./dist/models/associations.js');
 const cors = require('cors');
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 80;
 
 // Importing associations
 getAssociations();
