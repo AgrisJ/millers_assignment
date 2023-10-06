@@ -1,7 +1,7 @@
 {
   "name": "fashion-styles-showcase",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.ts",
   "devDependencies": {
     "@tsconfig/node18": "^18.2.2",
     "@types/cors": "^2.8.14",
@@ -12,6 +12,7 @@
     "@vitejs/plugin-vue-jsx": "^3.0.2",
     "@vue/tsconfig": "^0.4.0",
     "autoprefixer": "^10.4.16",
+    "concurrently": "^8.2.1",
     "npm-run-all2": "^6.0.6",
     "postcss": "^8.4.30",
     "prettier": "3.0.3",
@@ -36,10 +37,10 @@
     "vuex": "^4.1.0"
   },
   "scripts": {
-    "dev": "npm run --prefix ./api dev && npm run --prefix ./app dev",
+    "dev": "concurrently \"NODE_ENV=development ts-node server.ts\" \"npm run --prefix ./app dev\"",
     "build-api": "npx tsc",
     "build-app": "npm run --prefix ./app build",
-    "postinstall": "npm run build-api && npm run build-app",
-    "start": "node server.js"
+    "postinstall": "if test \"$NODE_ENV\" = \"production\" ; then npm run build-api && npm run build-app ; fi ",
+    "start": "NODE_ENV=production ts-node server.ts"
   }
 }

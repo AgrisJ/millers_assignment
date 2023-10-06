@@ -1,5 +1,5 @@
 require('dotenv').config({ path: `.env.${process.env.NODE_ENV}` });
-const express = require('express')
+const express = require('express');
 const path = require('path');
 const { getRoutes } = require('./dist/startup/routes.js');
 const { getAssociations } = require('./dist/models/associations.js');
@@ -17,11 +17,10 @@ app.use(cors());
 // Importing routes
 getRoutes(app);
 
-// Serving backend application
-app.use('/dist', express.static(path.join(__dirname, './dist')));
-
 // Serving frontend application
-app.use('/', express.static(path.join(__dirname, './app/dist')));
+if (process.env.NODE_ENV === 'production') {
+  app.use('/', express.static(path.join(__dirname, './app/dist')));
+}
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
