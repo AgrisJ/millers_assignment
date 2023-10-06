@@ -40,6 +40,6 @@
     "build-api": "npx tsc",
     "build-app": "npm run --prefix ./app build",
     "postinstall": "npm run build-api && npm run build-app",
-    "start": "NODE_ENV=production node index.js"
+    "start": "node server.js"
   }
 }
