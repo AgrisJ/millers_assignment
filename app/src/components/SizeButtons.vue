@@ -66,6 +66,7 @@ watch(
         />
       </div>
     </div>
+    <p v-if="lengthsToUse.length" :class="['font-Roboto font-thin uppercase']">Choose length</p>
     <div :class="['flex flex-wrap gap-1']">
       <div v-for="(lengthObj, index) in lengthsToUse" :key="index" class="my-2">
         <SizeLabel

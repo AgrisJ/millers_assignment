@@ -26,20 +26,18 @@ function handleUpdatePicked(event: string) {
 </script>
 
 <template>
-  <main :class="['container']">
-    <div :class="['grid-cols-4 flex flex-wrap gap-1 justify-center relative bg-white']">
-      <PictureBtn
-        v-for="(color, index) in selectedStyle?.Colors"
-        :key="index"
-        :color="color.color_name"
-        :picked="pickedColor"
-        @update:picked="handleUpdatePicked"
-      />
-    </div>
-    <div :class="['grid-cols-4 gap-4 flex justify-center relative bg-white']">
-      <SizeButtons :pickedColor="pickedColor" />
-    </div>
-  </main>
+  <div :class="['grid-cols-4 flex flex-wrap gap-1 sm:mx-52 mx-2  justify-start relativ mb-8']">
+    <PictureBtn
+      v-for="(color, index) in selectedStyle?.Colors"
+      :key="index"
+      :color="color.color_name"
+      :picked="pickedColor"
+      @update:picked="handleUpdatePicked"
+    />
+  </div>
+  <div :class="['grid-cols-4 gap-4 flex flex-col sm:mx-52 mx-2 relativ']">
+    <SizeButtons :pickedColor="pickedColor" />
+  </div>
 </template>
 
 <style scoped></style>

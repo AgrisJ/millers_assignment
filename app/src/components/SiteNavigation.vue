@@ -29,7 +29,7 @@ const toggleModal = () => {
 
 <template>
   <header :class="['sticky top-0 bg-fashion-primary shadow-lg']">
-    <nav :class="['container flex flex-col sm:flex-row items-center gap-4 text-white py-6 pr-0']">
+    <nav :class="['container px-0 flex flex-col sm:flex-row items-center gap-4 text-white py-6']">
       <RouterLink :to="{ name: 'home' }">
         <div :class="['flex items-center gap-3']">
           <p :class="['text-2xl text-center']">The Fashion Styles Component</p>
