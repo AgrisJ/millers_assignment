@@ -1,5 +1,10 @@
 {
+  "name": "fashion-styles-showcase",
+  "version": "1.0.0",
   "devDependencies": {
     "prettier": "3.0.3"
+  },
+  "scripts": {
+    "start": "npm --prefix ./api start && npm --prefix ./app start"
   }
 }
