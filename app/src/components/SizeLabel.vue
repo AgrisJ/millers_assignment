@@ -34,6 +34,7 @@ defineProps({
         :value="size"
         :checked="picked === size && volume > 0"
         @change="$emit('update:picked', ($event.target as HTMLInputElement).value)"
+        :disabled="volume === 0"
       />
       <EnvelopeIcon v-if="volume === 0" />
       <span :class="['font-semi-bold uppercase']">{{ size }}</span>
