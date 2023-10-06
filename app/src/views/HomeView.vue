@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import PictureBtn from '@/components/PictureBtn.vue';
 import SizeButtons from '@/components/SizeButtons.vue';
 
-const pickedColor = ref(null);
+const pickedColor = ref('');
 </script>
 
 <template>
