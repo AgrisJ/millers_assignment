@@ -1,4 +1,4 @@
-import express from 'express';
+import * as express from 'express';
 import { Styles } from '../models/styles';
 import { Availabilities } from '../models/availabilities';
 import { Images } from '../models/images';
@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
     const styles = await Styles.findAll({});
     res.json(styles);
   } catch (err) {
-    error(err, res);
+    error(err, req, res);
   }
 });
 
@@ -69,7 +69,7 @@ router.get('/:styleId', async (req, res) => {
     });
     res.json(style);
   } catch (err) {
-    error(err, res);
+    error(err, req, res);
   }
 });
 

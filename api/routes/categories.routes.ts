@@ -1,4 +1,4 @@
-import express from 'express';
+import * as express from 'express';
 import { Styles } from '../models/styles';
 import { Colors } from '../models/colors';
 import { Categories } from '../models/categories';
@@ -11,7 +11,7 @@ router.get('/', async (req, res) => {
     const categories = await Categories.findAll({});
     res.json(categories);
   } catch (err) {
-    error(err, res);
+    error(err, req, res);
   }
 });
 
@@ -31,7 +31,7 @@ router.get('/:categoryId/styles', async (req, res) => {
     });
     res.json(styles);
   } catch (err) {
-    error(err, res);
+    error(err, req, res);
   }
 });
 

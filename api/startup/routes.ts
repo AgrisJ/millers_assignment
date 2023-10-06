@@ -1,4 +1,4 @@
-import express from 'express';
+import * as express from 'express';
 import { error } from '../middleware/error';
 import styles from '../routes/styles.routes';
 import categories from '../routes/categories.routes';
