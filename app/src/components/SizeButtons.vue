@@ -3,6 +3,7 @@ import { ref, computed, watch } from 'vue';
 import SizeLabel from './SizeLabel.vue';
 import { type Style } from '@/models/StylesPerCategory';
 import { sizes as sizesData, lengths as lengthsData } from '@/services/demoData';
+import { sorted } from './utils/sortSizes';
 import useFetchDataOnRouteChange from '@/hooks/useFetchData';
 
 const { data: selectedStyle } = useFetchDataOnRouteChange<Style>('getStyle');
@@ -31,13 +32,13 @@ const sizesFetched = computed(() => {
   return selectedColor ? selectedColor.Sizes : [];
 });
 
-const lengthsFetched = computed(() => {
+const subsizesFetched = computed(() => {
   const selectedSize = getSelectedSize();
   return selectedSize ? selectedSize.Subsizes : [];
 });
 
 const sizesToUse = computed(() => (props.isDemo ? dummySizes.value : sizesFetched.value));
-const lengthsToUse = computed(() => (props.isDemo ? dummySizes.value?.[0]?.Subsizes : lengthsFetched.value));
+const subsizesToUse = computed(() => (props.isDemo ? dummySizes.value?.[0]?.Subsizes : subsizesFetched.value));
 
 const pickedSize = ref(sizesToUse.value?.[0]?.size_name);
 const pickedLength = ref('');
@@ -57,7 +58,7 @@ watch(
   <div>
     <p :class="['font-Roboto font-thin uppercase']">Choose size</p>
     <div :class="['flex flex-wrap gap-1']">
-      <div v-for="(sizeObj, index) in sizesToUse" :key="index" :class="['my-1']">
+      <div v-for="(sizeObj, index) in sorted(sizesToUse)" :key="index" :class="['my-1']">
         <SizeLabel
           :size="sizeObj.size_name"
           :picked="pickedSize"
@@ -66,9 +67,9 @@ watch(
         />
       </div>
     </div>
-    <p v-if="lengthsToUse?.length" :class="['font-Roboto font-thin uppercase']">Choose length</p>
+    <p v-if="subsizesToUse?.length" :class="['font-Roboto font-thin uppercase']">Choose length</p>
     <div :class="['flex flex-wrap gap-1']">
-      <div v-for="(lengthObj, index) in lengthsToUse" :key="index" class="my-2">
+      <div v-for="(lengthObj, index) in subsizesToUse" :key="index" class="my-2">
         <SizeLabel
           :size="lengthObj.size_name"
           :picked="pickedLength"
