@@ -24,7 +24,7 @@ export const sizes = [
     Availabilities: [{ volume: 30 }],
   },
 ];
-export const lengths = [
+export const subsizes = [
   {
     size_name: '30',
     Availabilities: [{ volume: 5 }],
