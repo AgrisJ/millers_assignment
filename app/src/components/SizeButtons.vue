@@ -19,12 +19,12 @@ const props = defineProps({
 const dummySizes = ref(
   sizesData.map((size) => ({
     ...size,
-    Children: lengthsData,
+    Subsizes: lengthsData,
   })),
 );
 
 const getSelectedColor = () => selectedStyle.value?.Colors?.find((color) => color.color_name === props.pickedColor);
-const getSelectedSize = () => sizesFetched.value.find((size) => size?.size_name === pickedSize?.value);
+const getSelectedSize = () => sizesFetched.value?.find((size) => size?.size_name === pickedSize?.value);
 
 const sizesFetched = computed(() => {
   const selectedColor = getSelectedColor();
@@ -33,11 +33,11 @@ const sizesFetched = computed(() => {
 
 const lengthsFetched = computed(() => {
   const selectedSize = getSelectedSize();
-  return selectedSize ? selectedSize.Children : [];
+  return selectedSize ? selectedSize.Subsizes : [];
 });
 
 const sizesToUse = computed(() => (props.isDemo ? dummySizes.value : sizesFetched.value));
-const lengthsToUse = computed(() => (props.isDemo ? dummySizes.value?.[0]?.Children : lengthsFetched.value));
+const lengthsToUse = computed(() => (props.isDemo ? dummySizes.value?.[0]?.Subsizes : lengthsFetched.value));
 
 const pickedSize = ref(sizesToUse.value?.[0]?.size_name);
 const pickedLength = ref('');
@@ -45,7 +45,7 @@ const pickedLength = ref('');
 watch(
   sizesToUse,
   (newSizes) => {
-    if (newSizes.length > 0) {
+    if (newSizes?.length > 0) {
       pickedSize.value = newSizes[0].size_name;
     }
   },
@@ -66,7 +66,7 @@ watch(
         />
       </div>
     </div>
-    <p v-if="lengthsToUse.length" :class="['font-Roboto font-thin uppercase']">Choose length</p>
+    <p v-if="lengthsToUse?.length" :class="['font-Roboto font-thin uppercase']">Choose length</p>
     <div :class="['flex flex-wrap gap-1']">
       <div v-for="(lengthObj, index) in lengthsToUse" :key="index" class="my-2">
         <SizeLabel

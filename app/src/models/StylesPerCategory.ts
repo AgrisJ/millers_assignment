@@ -2,6 +2,7 @@ export interface ColorSize {
   id: number;
   color_id: number;
   size_id: number;
+  parent_color_size_id?: number | null;
   created_at: string;
   updated_at: string;
 }
@@ -11,25 +12,19 @@ export interface Availability {
   volume: number;
   ColorSize: ColorSize;
 }
-
 export interface Size {
   id: number;
   size_name: string;
   Availabilities: Availability[];
-  Children: Size[];
-  color_sizes: ColorSize;
-}
-
-export interface ColorSizes {
-  id: number;
+  Subsizes: Size[];
+  ColorSize: ColorSize;
 }
 
 export interface Color {
   id: number;
   color_name: string;
-  Sizes: Size[];
   Image: null;
-  ColorSizes: ColorSizes[];
+  Sizes: Size[];
 }
 
 export interface Style {
