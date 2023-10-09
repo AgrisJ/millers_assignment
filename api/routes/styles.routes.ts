@@ -5,6 +5,7 @@ import { Images } from '../models/images';
 import { Colors } from '../models/colors';
 import { Sizes } from '../models/sizes';
 import { error } from '../middleware/error';
+import { ColorSize } from '../models/colorSize';
 
 const router = express.Router();
 
@@ -20,84 +21,68 @@ router.get('/', async (req, res) => {
 
 router.get('/:styleId', async (req, res) => {
   try {
-    const style = await Styles.findOne({
+    const style = (await Styles.findOne({
       where: {
         id: req.params.styleId,
       },
       include: [
         {
           model: Colors,
-          required: true,
-          attributes: ['color_name'],
+          attributes: ['id', 'color_name'],
           include: [
             {
+              model: Images,
+              attributes: ['image_url'],
+            },
+            {
               model: Sizes,
-              required: true,
               through: { as: 'color_sizes' },
               attributes: ['id', 'size_name'],
-              where: { parent_id: null }, // Only include 'parent' sizes
               include: [
                 {
                   model: Availabilities,
-                  required: false,
                   attributes: ['id', 'volume'],
                 },
-                // Child Sizes
-                {
-                  model: Sizes,
-                  as: 'Children',
-                  required: false,
-                  attributes: ['id', 'size_name'],
-                  include: [
-                    {
-                      model: Availabilities,
-                      required: false,
-                      attributes: ['id', 'volume'],
-                    },
-                  ],
-                },
               ],
-            },
-            {
-              model: Images,
-              required: false,
-              attributes: ['image_url'],
             },
           ],
         },
       ],
-    });
+    })) as IStyle;
+
+    // After getting the style, sizes and colors,
+    // run a separate query to get the subsizes for each color_size
+
+    type IStyle = Styles & { Colors: IColor[] };
+    type IColor = Colors & { color_sizes: IColorSize[]; Sizes: ISize[] };
+    type IColorSize = ColorSize & { Subsizes: Sizes[]; Availabilities: Availabilities[] };
+    type ISize = Sizes & { color_sizes: ColorSize };
+
+    for (let color of style.Colors ?? []) {
+      for (let size of color.Sizes ?? []) {
+        const sizeColorSizes = size.color_sizes.dataValues;
+
+        const colorSizeDetails = await ColorSize.findOne({
+          where: { parent_color_size_id: sizeColorSizes.id },
+          include: [
+            {
+              model: Sizes,
+              as: 'Subsizes',
+              attributes: ['id', 'size_name'],
+            },
+            {
+              model: Availabilities,
+              attributes: ['id', 'volume'],
+            },
+          ],
+        });
+        size.setDataValue('Subsizes', (colorSizeDetails as IColorSize)?.Subsizes);
+      }
+    }
     res.json(style);
   } catch (err) {
     error(err, req, res);
   }
 });
-
-// router.post('/', async (req, res) => {
-//   try {
-//     const style = await Styles.create(req.body);
-//     res.json(style);
-//   } catch (err) {
-//     handleError(err, res);
-//   }
-// });
-
-// router.put('/:id', async (req, res) => {
-//   try {
-//     const updatedStyle = await Styles.update(req.body, { where: { id: req.params.id } });
-//     res.json(updatedStyle);
-//   } catch (err) {
-//     handleError(err, res);
-//   }
-// });
-
-// router.delete('/:id', async (req, res) => {
-//   try {
-//     await Styles.destroy({ where: { id: req.params.id } });
-//     res.json({ message: 'Style deleted successfully' });
-//   } catch (err) {
-//     handleError(err, res);
-//   }
-// });
 
 export default router;

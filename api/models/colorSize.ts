@@ -5,6 +5,7 @@ class ColorSize extends Model {
   public id!: number;
   public color_id!: number;
   public size_id!: number;
+  public parent_color_size_id!: number;
 
   // timestamps!
   public readonly created_at!: Date;
@@ -23,6 +24,10 @@ ColorSize.init(
       allowNull: false,
     },
     size_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    parent_color_size_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },

@@ -15,19 +15,14 @@ export function getAssociations() {
   Colors.hasMany(ColorSize, { foreignKey: 'color_id' });
   Colors.belongsTo(Styles, { foreignKey: 'style_id' });
 
-  // Sizes Associations
-  Sizes.belongsToMany(Availabilities, { through: ColorSize, foreignKey: 'size_id', otherKey: 'id' });
-  Sizes.hasMany(ColorSize, { foreignKey: 'size_id' });
-  Sizes.hasMany(Sizes, { as: 'Children', foreignKey: 'parent_id' });
-  Sizes.belongsTo(Sizes, { as: 'Parent', foreignKey: 'parent_id' });
-
   // ColorSize Associations
-  ColorSize.belongsTo(Colors, { foreignKey: 'color_id' });
-  ColorSize.belongsTo(Sizes, { foreignKey: 'size_id' });
-  ColorSize.hasMany(Availabilities, { foreignKey: 'color_size_id' });
+  ColorSize.belongsToMany(ColorSize, { as: 'ColorSizeEntries', through: ColorSize, foreignKey: 'parent_color_size_id', otherKey: 'id' });
+  ColorSize.belongsToMany(Sizes, { as: 'Subsizes', through: ColorSize, foreignKey: 'id', otherKey: 'parent_color_size_id' });
+  ColorSize.belongsTo(Availabilities, { foreignKey: 'parent_color_size_id' });
 
-  // Availabilities Associations
-  Availabilities.belongsTo(ColorSize, { foreignKey: 'color_size_id' });
+  // Sizes Associations
+  Sizes.hasMany(ColorSize, { as: 'Children', foreignKey: 'size_id' });
+  Sizes.belongsToMany(Availabilities, { through: ColorSize, foreignKey: 'size_id', otherKey: 'id' });
 
   // Images Associations
   Images.belongsTo(Colors, { foreignKey: 'color_id' });
