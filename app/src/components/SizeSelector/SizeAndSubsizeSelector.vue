@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue';
+import { ref, computed } from 'vue';
 import SizeLabel from './SizeLabel.vue';
-import { type Style } from '@/models/StylesPerCategory';
+import { type Size, type Style } from '@/models/StylesPerCategory';
 import { sizes as sizesData, subsizes as subsizesData } from '@/services/demoData';
 import { sorted } from './utils/sortSizes';
 import useFetchDataOnRouteChange from '@/hooks/useFetchData';
@@ -24,6 +24,9 @@ const dummySizes = ref(
   })),
 );
 
+const pickedSize = ref('');
+const pickedSubsize = ref('');
+
 const getSelectedColor = () => selectedStyle.value?.Colors?.find((color) => color.color_name === props.pickedColor);
 const getSelectedSize = () => sizesFetched.value?.find((size) => size?.size_name === pickedSize?.value);
 
@@ -32,26 +35,22 @@ const sizesFetched = computed(() => {
   return selectedColor ? selectedColor.Sizes : [];
 });
 
+const allAvailableSubsizes = computed(() => {
+  return (sizesFetched.value as Size[]).reduce<Size[]>((acc, curr) => {
+    if (curr.Subsizes) {
+      acc.push(...curr.Subsizes);
+    }
+    return acc;
+  }, []);
+});
+
 const subsizesFetched = computed(() => {
   const selectedSize = getSelectedSize();
-  return selectedSize ? selectedSize.Subsizes : [];
+  return selectedSize ? selectedSize.Subsizes : allAvailableSubsizes.value;
 });
 
 const sizesToUse = computed(() => (props.isDemo ? dummySizes.value : sizesFetched.value));
 const subsizesToUse = computed(() => (props.isDemo ? dummySizes.value?.[0]?.Subsizes : subsizesFetched.value));
-
-const pickedSize = ref(sizesToUse.value?.[0]?.size_name);
-const pickedSubsize = ref('');
-
-watch(
-  sizesToUse,
-  (newSizes) => {
-    if (newSizes?.length > 0) {
-      pickedSize.value = newSizes[0].size_name;
-    }
-  },
-  { immediate: true },
-);
 </script>
 
 <template>

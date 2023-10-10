@@ -41,4 +41,3 @@ function handleUpdatePicked(event: string) {
 </template>
 
 <style scoped></style>
-@/components/sizeselector/SizeAndSubsizeSelector.vue
