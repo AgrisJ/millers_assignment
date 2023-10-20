@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import SizeLabel from './SizeLabel.vue';
-import { type Size, type Style } from '@/models/StylesPerCategory';
+import { type Size, type Style, type Color } from '@/models/StylesPerCategory';
 import { sizes as sizesData, subsizes as subsizesData } from '@/services/demoData';
 import { sorted } from './utils/sortSizes';
 import useFetchDataOnRouteChange from '@/hooks/useFetchData';
@@ -10,7 +10,7 @@ const { data: selectedStyle } = useFetchDataOnRouteChange<Style>('getStyle');
 
 const props = defineProps({
   pickedColor: {
-    type: String,
+    type: Object as () => Color,
   },
   isDemo: {
     type: Boolean,
@@ -27,7 +27,7 @@ const dummySizes = ref(
 const pickedSize = ref('');
 const pickedSubsize = ref('');
 
-const getSelectedColor = () => selectedStyle.value?.Colors?.find((color) => color.color_name === props.pickedColor);
+const getSelectedColor = () => selectedStyle.value?.Colors?.find((color) => color?.id === props.pickedColor?.id);
 const getSelectedSize = () => sizesFetched.value?.find((size) => size?.size_name === pickedSize?.value);
 
 const sizesFetched = computed(() => {
@@ -55,7 +55,7 @@ const subsizesToUse = computed(() => (props.isDemo ? dummySizes.value?.[0]?.Subs
 
 <template>
   <div>
-    <p :class="['font-Roboto font-thin uppercase']">Choose size</p>
+    <p :class="['text-xs font-light uppercase']">Choose size</p>
     <div :class="['flex flex-wrap gap-1']">
       <div v-for="(sizeObj, index) in sorted(sizesToUse)" :key="index" :class="['my-1']">
         <SizeLabel
@@ -66,7 +66,7 @@ const subsizesToUse = computed(() => (props.isDemo ? dummySizes.value?.[0]?.Subs
         />
       </div>
     </div>
-    <p v-if="subsizesToUse?.length" :class="['font-Roboto font-thin uppercase']">Choose length</p>
+    <p v-if="subsizesToUse?.length" :class="['text-xs font-light uppercase']">Choose length</p>
     <div :class="['flex flex-wrap gap-1']">
       <div v-for="(subsizesObj, index) in subsizesToUse" :key="index" class="my-2">
         <SizeLabel
