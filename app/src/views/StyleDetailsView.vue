@@ -1,42 +1,73 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import ColorPickerButton from '@/components/ColorPickerButton.vue';
 import SizeAndSubsizeSelector from '@/components/SizeSelector/SizeAndSubsizeSelector.vue';
 import useFetchDataOnRouteChange from '@/hooks/useFetchData';
-import { type Style } from '@/models/StylesPerCategory';
+import { type Style, type Image, type Color } from '@/models/StylesPerCategory';
 
 const { data: selectedStyle } = useFetchDataOnRouteChange<Style>('getStyle');
 
-let pickedColor = ref('');
+let pickedColor = ref<Color[]>([]);
+
+function containsColor(imgUrl: string) {
+  const colorString = '_color_';
+  return imgUrl.includes(colorString);
+}
 
 watch(
   selectedStyle,
   (newStyleValue) => {
     const colors = newStyleValue?.Colors;
     if (colors && colors.length > 0) {
-      pickedColor.value = colors[0].color_name;
+      pickedColor.value = [colors[0]];
     }
   },
   { immediate: true },
 );
 
-function handleUpdatePicked(event: string) {
-  pickedColor.value = event;
+function colorImages(color: Color) {
+  return computed(() => color?.Images?.filter((image: Image) => containsColor(image.image_url)));
+}
+
+function handleUpdatePicked(event: Color) {
+  pickedColor.value = [event];
 }
 </script>
 
 <template>
-  <div :class="['grid-cols-4 flex flex-wrap gap-1 sm:mx-52 mx-2  justify-start relativ mb-8']">
-    <ColorPickerButton
-      v-for="(color, index) in selectedStyle?.Colors"
-      :key="index"
-      :color="color.color_name"
-      :picked="pickedColor"
-      @update:picked="handleUpdatePicked"
-    />
-  </div>
-  <div :class="['grid-cols-4 gap-4 flex flex-col sm:mx-52 mx-2 relativ']">
-    <SizeAndSubsizeSelector :pickedColor="pickedColor" />
+  <div :class="['flex my-4 mx-4']">
+    <div :class="['flex']">
+      <div v-for="(color, colorIndex) in selectedStyle?.Colors" :key="'color-' + colorIndex" :class="['flex flex-col']">
+        <picture :class="['flex flex-col items-center justify-center']" v-for="(image, imageIndex) in color?.Images" :key="'image-' + imageIndex">
+          <img
+            v-if="!containsColor(image.image_url) && pickedColor[0].id === color.id"
+            :class="['flex flex-col items-center justify-center w-[410px] aspect-[410/547]']"
+            :src="image.image_url"
+            alt="Fashion Styles"
+          />
+        </picture>
+      </div>
+    </div>
+    <div :class="['flex flex-col ml-3']">
+      <h1 :class="['text-sm font-normal mb-2']">{{ selectedStyle?.style_name }}</h1>
+      <p :class="['text-xs font-bold mb-3']">399.95 KR</p>
+      <h2 :class="['text-xs font-light mb-3']">{{ pickedColor[0]?.color_name }}</h2>
+      <div :class="['flex mb-5']">
+        <div v-for="(color, colorIndex) in selectedStyle?.Colors" :key="'color-' + colorIndex" :class="['flex flex-col justify-start ml-1']">
+          <ColorPickerButton
+            v-for="(colorImage, colorImageIndex) in colorImages(color).value"
+            :key="'image-' + colorImageIndex"
+            :color="color"
+            :picked="pickedColor[0]"
+            :imageUrl="colorImage?.image_url"
+            @update:picked="handleUpdatePicked"
+          />
+        </div>
+      </div>
+      <div :class="['grid-cols-4 gap-4 flex flex-col relativ']">
+        <SizeAndSubsizeSelector :pickedColor="pickedColor[0]" />
+      </div>
+    </div>
   </div>
 </template>
 

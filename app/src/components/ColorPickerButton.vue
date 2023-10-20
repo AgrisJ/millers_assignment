@@ -1,12 +1,17 @@
 <script setup lang="ts">
 import { defineProps } from 'vue';
+import { type Color } from '@/models/StylesPerCategory';
 
 defineProps({
   picked: {
-    type: String,
+    type: Object as () => Color,
     required: true,
   },
   color: {
+    type: Object as () => Color,
+    default: '',
+  },
+  imageUrl: {
     type: String,
     default: '',
   },
@@ -14,17 +19,15 @@ defineProps({
 </script>
 <template>
   <button
-    :class="['flex flex-col items-center justify-center w-16 hover:border border-black w-15', picked === color ? 'border border-black w-15' : '']"
+    :class="[
+      'flex flex-col items-center justify-cente hover:border hover:border-black min-w-fit ',
+      picked.id === color.id ? 'border border-black' : 'border border-transparent',
+    ]"
     @click.prevent="$emit('update:picked', color)"
   >
     <picture :class="['flex flex-col items-center justify-center']">
-      <img
-        :class="['flex flex-col items-center justify-center']"
-        src="https://images.jackjones.com/12218240/4310468/001/jackjones-rddensfarvetcrewneckt-shirt-blaa.jpg?v=5400b28ddf8c9d658cb90b5c3e298acd&format=webp&width=120&quality=90&key=24-0-3"
-        alt="Fashion Styles"
-      />
+      <img :class="['flex flex-col items-center justify-center']" :src="imageUrl" alt="Fashion Styles" />
     </picture>
-    {{ color }}
   </button>
 </template>
 
