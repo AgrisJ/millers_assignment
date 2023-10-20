@@ -6,6 +6,7 @@ import { Colors } from '../models/colors';
 import { Sizes } from '../models/sizes';
 import { error } from '../middleware/error';
 import { ColorSize } from '../models/colorSize';
+import sequelize from 'sequelize';
 
 const router = express.Router();
 
@@ -32,7 +33,7 @@ router.get('/:styleId', async (req, res) => {
           include: [
             {
               model: Images,
-              attributes: ['image_url'],
+              attributes: ['id', 'image_url'],
             },
             {
               model: Sizes,
@@ -42,6 +43,8 @@ router.get('/:styleId', async (req, res) => {
                 {
                   model: Availabilities,
                   attributes: ['id', 'volume'],
+                  required: false, // Add this line
+                  where: sequelize.literal(`"Colors->Sizes->Availabilities->ColorSize"."id" = "Colors->Sizes->color_sizes"."id"`),
                 },
               ],
             },
@@ -49,6 +52,20 @@ router.get('/:styleId', async (req, res) => {
         },
       ],
     })) as IStyle;
+
+    // Parse image ids into an array and fetch the corresponding images
+    const imageIds = style?.image_ids && JSON.parse(style?.image_ids);
+    const images = await Images.findAll({
+      where: {
+        id: imageIds,
+      },
+    });
+
+    // Add the image urls to the style object
+    style.setDataValue(
+      'images',
+      images.map((image) => image.image_url),
+    );
 
     // After getting the style, sizes and colors,
     // run a separate query to get the subsizes for each color_size

@@ -11,7 +11,7 @@ export function getAssociations() {
 
   // Colors Associations
   Colors.belongsToMany(Sizes, { through: ColorSize, foreignKey: 'color_id', otherKey: 'size_id' });
-  Colors.hasOne(Images, { foreignKey: 'color_id' });
+  Colors.hasMany(Images, { foreignKey: 'color_id' });
   Colors.hasMany(ColorSize, { foreignKey: 'color_id' });
   Colors.belongsTo(Styles, { foreignKey: 'style_id' });
 
