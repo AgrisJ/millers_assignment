@@ -21,7 +21,7 @@ defineProps({
   <button
     :class="[
       'flex flex-col items-center justify-cente hover:border hover:border-black min-w-fit ',
-      picked.id === color.id ? 'border border-black' : 'border border-transparent',
+      picked?.id === color?.id ? 'border border-black' : 'border border-transparent',
     ]"
     @click.prevent="$emit('update:picked', color)"
   >

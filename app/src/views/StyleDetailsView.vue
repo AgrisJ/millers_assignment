@@ -26,7 +26,7 @@ watch(
 );
 
 function colorImages(color: Color) {
-  return computed(() => color?.Images?.filter((image: Image) => containsColor(image.image_url)));
+  return computed(() => color?.Images?.filter((image: Image) => containsColor(image?.image_url)));
 }
 
 function handleUpdatePicked(event: Color) {
@@ -40,7 +40,7 @@ function handleUpdatePicked(event: Color) {
       <div v-for="(color, colorIndex) in selectedStyle?.Colors" :key="'color-' + colorIndex" :class="['flex flex-col']">
         <picture :class="['flex flex-col items-center justify-center']" v-for="(image, imageIndex) in color?.Images" :key="'image-' + imageIndex">
           <img
-            v-if="!containsColor(image.image_url) && pickedColor[0].id === color.id"
+            v-if="!containsColor(image?.image_url) && pickedColor[0]?.id === color?.id"
             :class="['flex flex-col items-center justify-center w-[410px] aspect-[410/547]']"
             :src="image.image_url"
             alt="Fashion Styles"
